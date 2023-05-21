@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise 4</title>
+</head>
+
+<body>
+  <form method="post" action="/api/schedules">
+    <label for="name">Staff Name:</label>
+    <input type="text" id="name" name="name">
+    <label for="Date">Date:</label>
+    <input type="text" id="date" name="date" placeholder="mm-dd-yy">
+    <label for="time">Time:</label>
+    <input type="text" id="time" name="time" placeholder="hh:mm">
+    <input type="submit">
+  </form>
+  <script>
+
+    function formToJson(formData) {
+      let json = {};
+
+      for (let pair of formData.entries()) {
+        json[pair[0]] = pair[1]
+      }
+
+      return json;
+    }
+    const form = document.querySelector('form');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+
+      let data = new FormData(form);
+      let json = JSON.stringify(formToJson(data));
+      let request = new XMLHttpRequest();
+
+      request.open('POST', form.action);
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(json);
+
+      request.addEventListener('load', event => {
+        if (request.status === 201) {
+          form.reset();
+          alert(request.responseText);
+        } else {
+          alert(request.responseText);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
