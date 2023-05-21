@@ -21,32 +21,32 @@ const divBlue = document.querySelector('#blue');
 const divOrange = document.querySelector('#orange');
 const divGreen = document.querySelector('#green');
 
-const tracker = (() => {
-  const events = [];
+const tracker = (function () {
+  const eventsList = [];
   return {
     list() {
-      return events.slice();
+      return eventsList.slice();
     },
     elements() {
-      return this.list().map(({ target }) => target);
+      return this.list().map(event => event.target);
     },
     add(event) {
-      events.push(event);
+      eventsList.push(event);
     },
     clear() {
-      events.length = 0;
-      return events.length;
+      eventsList.length = 0;
+      return eventsList.length;
     },
   };
 })();
 
 function track(callback) {
-  function isEventTracked(events, event) {
-    return events.includes(event);
+  function eventExists(list, event) {
+    return list.includes(event);
   }
 
   return event => {
-    if (!isEventTracked(tracker.list(), event)) {
+    if (!eventExists(tracker.list(), event)) {
       tracker.add(event);
     }
 
