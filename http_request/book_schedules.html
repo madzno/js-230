@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise 5</title>
+</head>
+
+<body>
+  <h1>Schedules</h1>
+  <form method="post" action="/api/bookings">
+    <label for="id">Please select one schedule:</label>
+    <select id="id" name="id">
+    </select>
+    <br>
+    <label for="student_email">Email:</label>
+    <input type="text" id="student_email" name="student_email">
+    <input type="submit">
+  </form>
+
+  <script>
+    let selectList = document.getElementById('id');
+    let form = document.querySelector('form');
+
+    function getStaffNames() {
+      let staffNames = {};
+
+      let request = new XMLHttpRequest();
+      request.open('GET', 'http://localhost:3000/api/staff_members');
+
+      request.addEventListener('load', event => {
+        let staffMembers = JSON.parse(request.response);
+        staffMembers.forEach(staff => {
+          staffNames[staff.id] = staff.name;
+        });
+      });
+
+      request.send();
+
+      return staffNames;
+
+    }
+
+    function addOptions(schedules, names) {
+      selectList.options.length = 0;
+      schedules.forEach((schedule, index) => {
+        let text = `${names[schedule.staff_id]} | ${schedule.date} | ${schedule.time}`;
+        selectList.options[index] = new Option(text, schedule.id);
+      });
+    }
+
+    function formDataToJson(formData) {
+      let json = {};
+      for (let pair of formData.entries()) {
+        json[pair[0]] = pair[1];
+      }
+
+      return json;
+    }
+
+
+    selectList.addEventListener('click', event => {
+      let staffNamesObj = getStaffNames();
+
+      let request = new XMLHttpRequest();
+      request.open('GET', 'http://localhost:3000/api/schedules');
+
+      request.addEventListener('load', event => {
+        let allSchedules = JSON.parse(request.response);
+
+        let availableSchedules = allSchedules.filter(schedule => {
+          return schedule.student_email === null;
+        });
+
+        addOptions(availableSchedules, staffNamesObj);
+
+
+      });
+
+      request.send();
+    });
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      let formData = new FormData(form);
+      let json = JSON.stringify(formDataToJson(formData));
+      let request = new XMLHttpRequest();
+
+      request.open('POST', form.action);
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(json);
+
+      request.addEventListener('load', event => {
+        if (request.status === 204) {
+          alert('Successfully Booked Schedule');
+        } else if (request.status === 404) {
+          alert(`${request.responseText}`);
+        }
+      });
+    });
+
+
+  </script>
+</body>
+
+</html>
