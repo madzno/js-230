@@ -1,0 +1,55 @@
+< !doctype html >
+  <html lang="en-US">
+
+    <head>
+      <meta charset="UTF-8">
+        <title>Exercise 6</title>
+    </head>
+
+    <body>
+      <h1>Bookings</h1>
+      <ul id='dates'></ul>
+
+      <script>
+        let list = document.getElementById('dates');
+
+    (() => {
+          let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/bookings');
+        xhr.responseType = 'json';
+        xhr.send();
+
+      xhr.addEventListener('load', event => {
+          let bookedDates = xhr.response;
+
+        bookedDates.forEach(date => {
+          let el = document.createElement('li');
+        el.textContent = date;
+        list.appendChild(el);
+        });
+      });
+    })();
+
+    list.addEventListener('click', event => {
+          let dateClicked = event.target;
+        let targetDate = event.target.textContent;
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', `/api/bookings/${targetDate}`)
+        xhr.responseType = 'json';
+        xhr.send();
+
+      xhr.addEventListener('load', () => {
+          let bookings = xhr.response;
+        bookings.forEach(booking => {
+          let el = document.createElement('li');
+        el.textContent = `${booking[0]} | ${booking[1]} | ${booking[2]}`;
+        dateClicked.appendChild(el);
+        });
+      });
+    });
+
+      </script>
+    </body>
+
+  </html>
