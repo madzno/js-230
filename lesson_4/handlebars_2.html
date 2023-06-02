@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Handlebars Practice</title>
+  <script src="jquery.js"></script>
+  <script src="handlebars.js"></script>
+  <script src='handlebars_practice_2.js'></script>
+
+  <script id="tags" type="text/x-handlebars">
+      <ul>
+        {{# each tags}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+  </script>
+
+  <script id='post' type='text/x-handlebars'>
+    {{#each posts}}
+    <article>
+      <h1>{{title}}</h1>
+      <p><time> Posted on {{published}}</time></p>
+      {{{body}}}
+      {{#if tag}}
+      {{> tags}}
+      {{else}}
+      <p>Not tagged<p>
+      {{/if}}
+    </article>
+    {{/each}}
+  </script>
+</head>
+
+<body>
+</body>
+
+</html>
