@@ -28,10 +28,7 @@ let Modal = (function () {
         this.showModal($link);
       }.bind(this));
 
-      this.$closeLink.on('click', function (event) {
-        event.preventDefault();
-        this.hideModal();
-      }.bind(this))
+      this.$closeLink.on('click', this.hideModal.bind(this));
 
     }
 
@@ -60,7 +57,8 @@ let Modal = (function () {
       });
     }
 
-    hideModal() {
+    hideModal(event) {
+      event.preventDefault();
       this.toggle();
       this.$h3.text('');
       this.$p.text('');

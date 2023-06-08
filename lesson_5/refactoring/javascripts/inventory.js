@@ -1,6 +1,10 @@
+"use strict";
+
 let inventory;
 
 (function () {
+
+
   inventory = {
     lastId: 0,
     collection: [],
@@ -10,7 +14,8 @@ let inventory;
     },
     cacheTemplate: function () {
       let inventoryTmpl = document.getElementById('inventory_item');
-      this.template = inventoryTmpl.innerHTML;
+      this.template = Handlebars.compile(inventoryTmpl.innerHTML);
+      inventoryTmpl.remove();
     },
     add: function () {
       this.lastId++;
@@ -41,53 +46,35 @@ let inventory;
 
       return found_item;
     },
-    update: function (item) {
-      let id = this.findID(item),
-        item = this.get(id);
+    update: function (row) {
+      let id = this.findID(row);
+      let item = this.get(id);
 
-      item.name = $item.find("[name^=item_name]").val();
-      item.stock_number = $item.find("[name^=item_stock_number]").val();
-      item.quantity = $item.find("[name^=item_quantity]").val();
+      item.name = row.querySelector("[name^=item_name]").value;
+      item.stock_number = row.querySelector("[name^=item_stock_number]").value;
+      item.quantity = row.querySelector("[name^=item_quantity]").value;
     },
     newItem: function (e) {
       e.preventDefault();
-      var item = this.add(),
-        $item = $(this.template.replace(/ID/g, item.id));
-
-      $("#inventory").append($item);
+      let item = this.add();
+      let table = document.querySelector('#inventory');
+      table.insertAdjacentHTML('beforeend', this.template({ id: item.id }));
     },
     findParent: function (e) {
-      return e.target.parentNode.parentNode;
+      return e.target.closest("tr");
     },
     findID: function (item) {
-      let id;
-
-      let immediateChildren = Array.from(item.children);
-
-      immediateChildren.forEach(child => {
-        let grandChildren = Array.from(child.children);
-
-        grandChildren.forEach(grandChild => {
-          if (grandChild.hasAttribute('data-name')) {
-            id = grandChild.value;
-          }
-        });
-      });
-
-      return id;
-
+      return +item.querySelector("input[type=hidden]").value;
     },
 
     deleteItem: function (e) {
       e.preventDefault();
       let item = this.findParent(e);
-      item.remove();
-
       this.remove(this.findID(item));
+      item.remove();
     },
     updateItem: function (e) {
-      var item = this.findParent(e);
-
+      let item = this.findParent(e);
       this.update(item);
     },
     bindEvents: function () {
@@ -97,7 +84,7 @@ let inventory;
           this.deleteItem(event);
         }
       }.bind(this));
-      document.getElementById('inventory').addEventListener('blur', function (event) {
+      document.getElementById('inventory').addEventListener('focusout', function (event) {
         if (event.target.tagName === 'INPUT') {
           this.updateItem(event);
         }
@@ -112,7 +99,7 @@ let inventory;
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-  inventory.init();
+  inventory.init.bind(inventory)();
 
 });
 
