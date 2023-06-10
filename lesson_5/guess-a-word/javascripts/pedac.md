@@ -28,14 +28,12 @@ index to the matchingIndexes array
 - game over mesasage = 'Sorry! You're out of guesses'
 - get the replay link using getElementbyId('replay');
 - using classList, add the class ('visible');
+- unbind the 'keyup' event using removeEventListener (make sure all of the argumetns match)
 
 ## Click event for the replay link
 - 'click' on replay link  (may need to be in the 'DOMContentLoaded' listner)
+- prevent default
 - new game constructor is called
-- class 'visible' is removed from the replay link
-- className of 'apples' div is reset to ''
-- content of the message paragraph is set to ''
-- remove all the spans from the guesses' div
 
 ## this.outputGuess(letter) method
 - get the guesses' div , id 'guesses'
@@ -47,3 +45,12 @@ index to the matchingIndexes array
 - get the message paragraph and set its textContent to the gameWon message
 - get the replay link using getElementbyId('replay');
 - using classList, add the class ('visible');
+- unbind the 'keyup' event using removeEventListener (make sure all of the arguments match)
+
+## this.reset() method 
+- called everytime the new constructor is called
+- class visible is removed from the replay link
+- className of the 'apples' div is reset to ''
+- content of the message paragraph is set to ''
+- remove all the spans from the guesses' div (can combine with removing from the word div)
+- reset the document.body className to '' 
