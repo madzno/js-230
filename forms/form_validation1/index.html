@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <title>Sign Up Form</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="whitespace-reset.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="jquery.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body>
+  <h1>Sign Up Form</h1>
+  <form action="#" method="post" novalidate>
+    <fieldset>
+      <dl>
+        <dt><label for="first_name">First Name</label></dt>
+        <dd>
+          <input type="text" name="first_name" id="first_name" required />
+          <span class="error_message"></span>
+        </dd>
+
+        <dt><label for="last_name">Last Name</label></dt>
+        <dd>
+          <input type="text" name="last_name" id="last_name" required />
+          <span class="error_message"></span>
+        </dd>
+
+        <dt><label for="email">Email Address</label></dt>
+        <dd>
+          <input type="email" name="email" id="email"
+            placeholder="you@example.com" required />
+        </dd>
+
+        <dt><label for="password">Password</label></dt>
+        <dd><input type="password" name="password" id="password" required />
+        </dd>
+
+        <dt><label for="phone_number">Phone Number</label></dt>
+        <dd><input type="text" name="phone_number" id="phone_number"
+            placeholder="111-222-3333" /></dd>
+
+        <button type="submit">Sign Up</button>
+
+      </dl>
+    </fieldset>
+  </form>
+</body>
+
+</html>
