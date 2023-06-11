@@ -65,3 +65,10 @@ button {
 .error_message {
   color: #a93333;
 }
+
+#cc1,
+#cc2,
+#cc3,
+#cc4 {
+  width: 65px;
+}

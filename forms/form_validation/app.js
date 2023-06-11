@@ -1,20 +1,24 @@
 class formValidator {
   constructor() {
-    this.form = document.querySelector('form');
-    this.inputArr = Array.from(document.querySelectorAll('input'));
+    this.$form = $('form');
+    this.$phone = $('#phone_number');
+    this.$infoIputs = $('#first_name, #last_name, #email, #password, #phone_number');
+    this.$nameInputs = $('#first_name, #last_name');
+    this.$creditCardFields = $('#cc1, #cc2, #cc3, #cc4');
     this.bindEvents();
   }
 
   bindEvents() {
-    this.inputArr.forEach(input => {
-      input.addEventListener('blur', this.handleBlurEvent.bind(this));
-      input.addEventListener('focus', this.handleFocusEvent.bind(this));
-    });
-    this.form.addEventListener('submit', this.handleFormEvent.bind(this));
+    this.$infoIputs.on('blur', this.handleBlurEvent.bind(this));
+    this.$infoIputs.on('focus', this.handleFocusEvent.bind(this));
+    this.$form.on('submit', this.handleFormEvent.bind(this));
+    this.$nameInputs.on('keypress', this.handleNonAlpha.bind(this));
+    this.$phone.on('keypress', this.handlePhoneDigits.bind(this));
+    this.$creditCardFields.on('keypress', this.onlyNumeric.bind(this));
   }
 
   removeError(element, errorSpan) {
-    element.classList.toggle('invalid_field');
+    element.className = '';
     errorSpan.textContent = '';
   }
 
@@ -27,7 +31,7 @@ class formValidator {
   }
 
   makeInvalid(element) {
-    return element.classList.toggle('invalid_field');
+    return element.classList.add('invalid_field');
   }
 
   missingInputError(element, error) {
@@ -78,8 +82,33 @@ class formValidator {
     }
   }
 
+  handleNonAlpha(event) {
+    let key = event.key;
+
+    if (key.match(/[^a-zA-Z]/g)) {
+      event.preventDefault();
+    }
+  }
+
+  handlePhoneDigits(event) {
+    let key = event.key;
+
+    if (key.match(/[^\-0-9]/g)) {
+      event.preventDefault();
+    }
+  }
+
+  onlyNumeric(event) {
+    let key = event.key;
+
+    if (key.match(/[^0-9]/g)) {
+      event.preventDefault();
+    }
+  }
 }
+
 
 $(function () {
   new formValidator();
-})
+
+});
