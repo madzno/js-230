@@ -72,3 +72,9 @@ button {
 #cc4 {
   width: 65px;
 }
+
+.serialized {
+  padding: 20px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}

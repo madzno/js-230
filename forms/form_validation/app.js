@@ -5,6 +5,8 @@ class formValidator {
     this.$infoIputs = $('#first_name, #last_name, #email, #password, #phone_number');
     this.$nameInputs = $('#first_name, #last_name');
     this.$creditCardFields = $('#cc1, #cc2, #cc3, #cc4');
+    this.$firstThreeCC = $('#cc1, #cc2, #cc3');
+
     this.bindEvents();
   }
 
@@ -15,6 +17,7 @@ class formValidator {
     this.$nameInputs.on('keypress', this.handleNonAlpha.bind(this));
     this.$phone.on('keypress', this.handlePhoneDigits.bind(this));
     this.$creditCardFields.on('keypress', this.onlyNumeric.bind(this));
+    this.$firstThreeCC.on('keyup', this.handleTabForward.bind(this));
   }
 
   removeError(element, errorSpan) {
@@ -71,14 +74,31 @@ class formValidator {
     this.removeError(currentElement, errorMessage);
   }
 
-  handleFormEvent(event) {
-    let formErrorElement = document.querySelector('.form_errors');
+  formIsValid(form) {
+    return form.checkValidity();
+  }
 
-    if (event.currentTarget.checkValidity()) {
+  displayQueryString(form) {
+    let data = new FormData(form);
+    let params = new URLSearchParams([...data]);
+    let allCreditCardNums = params.getAll('credit_card').join('');
+    params.set('credit_card', allCreditCardNums);
+    let paragraph = document.createElement('p');
+    let serializedDiv = document.querySelector('div.serialized');
+    serializedDiv.appendChild(paragraph);
+    paragraph.textContent = params;
+  }
+
+  handleFormEvent(event) {
+    event.preventDefault();
+    let formErrorElement = document.querySelector('.form_errors');
+    let form = event.currentTarget;
+
+    if (this.formIsValid(form)) {
       formErrorElement.textContent = '';
+      this.displayQueryString(form);
     } else {
       formErrorElement.textContent = 'Fix errors before submitting this form';
-      event.preventDefault();
     }
   }
 
@@ -105,10 +125,19 @@ class formValidator {
       event.preventDefault();
     }
   }
+
+  handleTabForward(event) {
+    let currentValue = event.currentTarget.value;
+    let nextCC = $(event.currentTarget).nextAll('input')[0];
+    let maxLength = Number(event.currentTarget.getAttribute('maxLength'));
+
+    if (currentValue.length === maxLength) {
+      $(nextCC).trigger('focus');
+    }
+  }
 }
 
 
 $(function () {
   new formValidator();
-
 });

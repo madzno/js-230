@@ -51,13 +51,17 @@
 
         <dt><label for='credit_card'>Credit Card</label></dt>
         <dd>
-          <input type="text" name="credit_card" id="cc1" maxLength="4" />
+          <input type="text" name="credit_card" id="cc1" maxLength="4"
+            minlength="4" />
           <span>--</span>
-          <input type="text" name="credit_card" id="cc2" maxLength="4" />
+          <input type="text" name="credit_card" id="cc2" maxLength="4"
+            minlength="4" />
           <span>--</span>
-          <input type="text" name="credit_card" id="cc3" maxLength="4" />
+          <input type="text" name="credit_card" id="cc3" maxLength="4"
+            minlength="4" />
           <span>--</span>
-          <input type="text" name="credit_card" id="cc4" maxLength="4" />
+          <input type="text" name="credit_card" id="cc4" maxLength="4"
+            minlength="4" />
         </dd>
 
         <button type="submit">Sign Up</button>
@@ -65,6 +69,10 @@
       </dl>
     </fieldset>
   </form>
+
+  <div class="serialized">
+    <h2>Serialized Form</h2>
+  </div>
 </body>
 
 </html>
